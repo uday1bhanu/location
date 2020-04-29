@@ -1,2 +1,2 @@
 # location
-Location app
+Location app that provides random location
