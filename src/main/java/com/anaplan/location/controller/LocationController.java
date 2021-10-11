@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class LocationController {
@@ -15,6 +16,7 @@ public class LocationController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private static List<String> locations;
+    private static Map<String, String> env;
 
     static {
         locations = new ArrayList<String>() {{
@@ -40,6 +42,7 @@ public class LocationController {
             add("Sydney");
             add("Tokyo");
         }};
+        env = System.getenv();
     }
 
     /**
@@ -49,8 +52,12 @@ public class LocationController {
      */
     @RequestMapping(value = "/location", method = RequestMethod.GET)
     public String location(){
+        String dataCenter = env.get("DC_NAME");
+        String cluster = env.get("CLUSTER_NAME");
+        String verion = env.get("VERSION");
         String currentLocation = locations.get((int)(Math.random()*(locations.size())));
-        logger.info("My current location is: "+ currentLocation);
-        return "My current location is: "+ currentLocation;
+        String responseOut = dataCenter + "-" + cluster + "-"+verion + "-"+ "My current location is: "+ currentLocation;
+        logger.info(responseOut);
+        return responseOut;
     }
 }
